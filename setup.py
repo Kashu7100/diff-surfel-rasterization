@@ -31,33 +31,18 @@ setup(
     packages=find_packages(),
     # Include all source files (.cu, .cpp, .h) for JIT compilation
     package_data={
-        "": [
-            "*.cu",
-            "*.cpp",
-            "*.h",
-            "*.cuh",
-            "cuda_rasterizer/*.cu",
-            "cuda_rasterizer/*.h",
-            "cuda_rasterizer/*.cuh",
+        "diff_surfel_rasterization": [
+            "csrc/*.cu",
+            "csrc/*.cpp",
+            "csrc/*.h",
+            "csrc/*.cuh",
+            "csrc/cuda_rasterizer/*.cu",
+            "csrc/cuda_rasterizer/*.h",
+            "csrc/cuda_rasterizer/*.cuh",
         ],
     },
-    # Also include source files at repo root level
-    # These will be accessible from Path(__file__).parent.parent in __init__.py
-    data_files=[
-        (
-            ".",
-            [
-                "ext.cpp",
-                # Add any root-level .cu files here
-            ],
-        ),
-        (
-            "cuda_rasterizer",
-            [
-                # List cuda_rasterizer files if they're at repo root
-            ],
-        ),
-    ],
+    # Data files not needed; source lives under package csrc/
+    data_files=[],
     include_package_data=True,
     # Dependencies
     python_requires=">=3.7",
