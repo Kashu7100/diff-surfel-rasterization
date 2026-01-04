@@ -1,5 +1,10 @@
 # Differential Surfel Rasterization
 
+```bash
+pip install eden-diff-surfel-rasterization==0.1.0a0
+```
+
+
 This is the rasterization engine for the paper "2D Gaussian Splatting for  Geometrically Accurate Radiance Fields". If you can make use of it in your own research, please be so kind to cite us.
 
 <section class="section" id="BibTeX">
