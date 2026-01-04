@@ -34,9 +34,8 @@
 // #define FAR_PLANE 100.0
 #define DETACH_WEIGHT 0
 
-__device__ const float near_n = 0.2;
-__device__ const float far_n = 100.0;
-__device__ const float FilterSize = 0.707106; // sqrt(2) / 2
+//__device__ const float near_n = 0.2;
+//__device__ const float far_n = 100.0;
 __device__ const float FilterInvSquare = 2.0f;
 
 // Spherical harmonics coefficients
@@ -187,7 +186,9 @@ __forceinline__ __device__ bool in_frustum(int idx,
 	const float* viewmatrix,
 	const float* projmatrix,
 	bool prefiltered,
-	float3& p_view)
+	float3& p_view, 
+	float near_n , 
+	float far_n)
 {
 	float3 p_orig = { orig_points[3 * idx], orig_points[3 * idx + 1], orig_points[3 * idx + 2] };
 
@@ -197,7 +198,7 @@ __forceinline__ __device__ bool in_frustum(int idx,
 	float3 p_proj = { p_hom.x * p_w, p_hom.y * p_w, p_hom.z * p_w };
 	p_view = transformPoint4x3(p_orig, viewmatrix);
 
-	if (p_view.z <= 0.2f)// || ((p_proj.x < -1.3 || p_proj.x > 1.3 || p_proj.y < -1.3 || p_proj.y > 1.3)))
+	if ((p_view.z <= near_n) || (p_view.z > far_n) || (p_proj.x < -1.3 || p_proj.x > 1.3 || p_proj.y < -1.3 || p_proj.y > 1.3))
 	{
 		if (prefiltered)
 		{
@@ -250,10 +251,10 @@ quat_to_rotmat_vjp(const glm::vec4 quat, const glm::mat3 v_R) {
 	// w element stored in x field
 	v_quat.x =
 		2.f * (
-				  // v_quat.w = 2.f * (
-				  x * (v_R[1][2] - v_R[2][1]) + y * (v_R[2][0] - v_R[0][2]) +
-				  z * (v_R[0][1] - v_R[1][0])
-			  );
+				// v_quat.w = 2.f * (
+				x * (v_R[1][2] - v_R[2][1]) + y * (v_R[2][0] - v_R[0][2]) +
+				z * (v_R[0][1] - v_R[1][0])
+			);
 	// x element in y field
 	v_quat.y =
 		2.f *
