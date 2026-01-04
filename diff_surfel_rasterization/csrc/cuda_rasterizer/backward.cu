@@ -211,7 +211,6 @@ renderCUDA(
 	float dL_dnormal2D[3];
 	const int median_contributor = inside ? n_contrib[pix_id + H * W] : 0;
 	float dL_dmedian_depth;
-	float dL_dmax_dweight;
 
 	if (inside) {
 		dL_ddepth = dL_depths[DEPTH_OFFSET * H * W + pix_id];
@@ -221,7 +220,6 @@ renderCUDA(
 			dL_dnormal2D[i] = dL_depths[(NORMAL_OFFSET + i) * H * W + pix_id];
 
 		dL_dmedian_depth = dL_depths[MIDDEPTH_OFFSET * H * W + pix_id];
-		// dL_dmax_dweight = dL_depths[MEDIAN_WEIGHT_OFFSET * H * W + pix_id];
 	}
 
 	// for compute gradient with respect to depth and normal
@@ -244,11 +242,6 @@ renderCUDA(
 
 	float last_alpha = 0;
 	float last_color[C] = { 0 };
-
-	// Gradient of pixel coordinate w.r.t. normalized 
-	// screen-space viewport corrdinates (-1 to 1)
-	const float ddelx_dx = 0.5 * W;
-	const float ddely_dy = 0.5 * H;
 
 	// Traverse all Gaussians
 	for (int i = 0; i < rounds; i++, toDo -= BLOCK_SIZE)
@@ -317,7 +310,6 @@ renderCUDA(
 
 			T = T / (1.f - alpha);
 			const float dchannel_dcolor = alpha * T;
-			const float w = alpha * T;
 			// Propagate gradients to per-Gaussian colors and keep
 			// gradients w.r.t. alpha (blending factor for a Gaussian/pixel
 			// pair).
@@ -345,7 +337,6 @@ renderCUDA(
 			const float dmd_dd = (far_n * near_n) / ((far_n - near_n) * c_d * c_d);
 			if (contributor == median_contributor-1) {
 				dL_dz += dL_dmedian_depth;
-				// dL_dweight += dL_dmax_dweight;
 			}
 #if DETACH_WEIGHT 
 			// if not detached weight, sometimes 
