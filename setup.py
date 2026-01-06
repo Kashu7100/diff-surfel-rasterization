@@ -21,7 +21,7 @@ except FileNotFoundError:
 
 setup(
     name="eden_diff_surfel_rasterization",
-    version="0.1.0a",
+    version="0.1.0b",
     author="Kashu Yamazaki",
     description="Differentiable rasterizer for 2D Gaussian Splatting",
     long_description=long_description,
@@ -39,10 +39,9 @@ setup(
             "csrc/cuda_rasterizer/*.cu",
             "csrc/cuda_rasterizer/*.h",
             "csrc/cuda_rasterizer/*.cuh",
+            "third_party/glm/glm/**",
         ],
     },
-    # Data files not needed; source lives under package csrc/
-    data_files=[],
     include_package_data=True,
     # Dependencies
     python_requires=">=3.7",

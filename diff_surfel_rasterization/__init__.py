@@ -58,7 +58,8 @@ except ImportError:
         include_dirs = [
             str(_src_path),
             str(_src_path / "cuda_rasterizer"),
-            str(_src_path.parent.parent / "third_party" / "glm"),
+            # vendored headers live inside the package
+            str(_src_path.parent / "third_party" / "glm"),
         ]
 
         # Build directory
