@@ -1,7 +1,7 @@
 # Differential Surfel Rasterization
 
 ```bash
-pip install eden-diff-surfel-rasterization==0.1.0a0
+pip install eden-diff-surfel-rasterization
 ```
 
 
